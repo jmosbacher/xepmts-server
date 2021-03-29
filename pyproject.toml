@@ -22,7 +22,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.7.1"
-click = "*"
 xepmts-endpoints = "^0.1.0"
 xeauth = "0.1.2"
 toml = "^0.10.2"
