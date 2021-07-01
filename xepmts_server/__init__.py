@@ -4,7 +4,7 @@ from .server import run_simple, make_app, create_app
 
 __author__ = """Yossi Mosbacher"""
 __email__ = 'joe.mosbacher@gmail.com'
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 
 VERSIONS = {
     "v1": v1,
