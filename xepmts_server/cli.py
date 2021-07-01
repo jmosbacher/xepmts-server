@@ -4,6 +4,7 @@ import sys
 import click
 from xepmts_server import make_app
 from werkzeug.serving import run_simple
+from flask.cli import with_appcontext
 
 
 @click.group()
@@ -16,12 +17,14 @@ def main():
 
 
 @main.command()
+@with_appcontext
 def run(address='0.0.0.0', port=5000):
     app = make_app()
     run_simple(address, port, app,
                 use_reloader=False, use_debugger=False, use_evalex=False)
 
 @main.command()
+@with_appcontext
 def debug(address='0.0.0.0', port=5000):
     app = make_app(debug=True)
     run_simple(address, port, app,
