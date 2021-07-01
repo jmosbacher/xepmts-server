@@ -4,8 +4,9 @@ from xepmts_endpoints import get_endpoints
 GLOBAL_WRITE_ROLES = ["admin", "expert"]
 GLOBAL_READ_ROLES = ["read:all"]
 
-def get_domain(global_write_roles=GLOBAL_WRITE_ROLES, global_read_roles=GLOBAL_READ_ROLES):
-    endpoints = get_endpoints()
+def get_domain(global_write_roles=GLOBAL_WRITE_ROLES, global_read_roles=GLOBAL_READ_ROLES, endpoints=None):
+    if endpoints is None:
+        endpoints = get_endpoints()
     for endpoint in endpoints.values():
         experiment = endpoint.get("experiment", "xenonnt")
         detector = endpoint.get("detector", "tpc")

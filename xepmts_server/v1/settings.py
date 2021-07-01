@@ -62,3 +62,4 @@ X_DOMAINS = ['http://localhost:8000',
              ]
 
 X_HEADERS = ['Content-Type', 'If-Match', 'Authorization', 'X-HTTP-Method-Override']  # Needed for the "Try it out" buttons
+

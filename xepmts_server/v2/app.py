@@ -3,12 +3,16 @@ import os
 
 from xepmts_server.v2.domain import get_domain
 from xepmts_server.v2 import settings
+from xepmts_server.utils import clean_dict
 
+# from eve_jwt import JWTAuth
+SETTINGS_FILE = settings.__file__
 
-def make_app(swagger=False, export_metrics=False, **kwargs):
+def make_app(settings=SETTINGS_FILE, swagger=False, export_metrics=False, auth=None, **kwargs):
     from eve import Eve
     
-    app = Eve(settings=settings.__file__, **kwargs)
+
+    app = Eve(settings=settings, auth=auth, **kwargs)
     if swagger:
         # from eve_swagger import swagger as swagger_blueprint
         from eve_swagger import get_swagger_blueprint
@@ -38,13 +42,17 @@ def make_app(swagger=False, export_metrics=False, **kwargs):
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app)
+        
+    @app.route(f'/{app.config["API_VERSION"]}/endpoints')
+    def endpoints():
+        return clean_dict(app.config['DOMAIN'])
 
     return app
 
 
 def make_local_app(**kwargs):
     import eve
-    app = eve.Eve(settings=settings.__file__, **kwargs)
+    app = eve.Eve(settings=SETTINGS_FILE, **kwargs)
     return app
     
 def list_roles():

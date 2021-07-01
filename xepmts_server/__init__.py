@@ -1,6 +1,6 @@
 from . import v1
 from . import v2
-from .server import run_simple, create_app
+from .server import run_simple, make_app, create_app
 
 __author__ = """Yossi Mosbacher"""
 __email__ = 'joe.mosbacher@gmail.com'

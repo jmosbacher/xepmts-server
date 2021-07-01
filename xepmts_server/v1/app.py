@@ -2,10 +2,13 @@
 import os
 # from xepmts.api.server.v1.settings import get_settings_dict
 
-from xepmts_server.v1 import settings as settings
-settings_file = settings.__file__
+from xepmts_server.v1 import settings
+# from xepmts_server.v1.auth import XenonTokenAuth
 
-def make_app(settings=settings_file, auth=None, app=None,
+SETTINGS_FILE = settings.__file__
+from xepmts_server.utils import clean_dict
+
+def make_app(settings=SETTINGS_FILE, auth=None, app=None,
              swagger=False, fs_store=False,
              export_metrics=False):
 
@@ -44,18 +47,21 @@ def make_app(settings=settings_file, auth=None, app=None,
 
         }
 
-
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app)
 
+    @app.route(f'/{app.config["API_VERSION"]}/endpoints')
+    def endpoints():
+        return clean_dict(app.config['DOMAIN'])
+    # print("made app for  v1")
     return app
 
 
 def make_local_app():
     import eve
 
-    app = eve.Eve(settings=settings_file)
+    app = eve.Eve(settings=SETTINGS_FILE)
     return app
     
 def list_roles():
