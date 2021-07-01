@@ -1,5 +1,6 @@
 
 import os
+from xepmts_server.v2.secrets import MONGO_PASSWORD
 
 VERSIONS = ['v1', 'v2', 'sc']
 
