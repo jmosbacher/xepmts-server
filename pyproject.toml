@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "xepmts_server"
-version = "0.1.6"
+version = "0.1.7"
 homepage = "https://github.com/jmosbacher/xepmts_server"
 description = "Top-level package for xepmts-server."
 authors = ["Yossi Mosbacher <joe.mosbacher@gmail.com>"]
