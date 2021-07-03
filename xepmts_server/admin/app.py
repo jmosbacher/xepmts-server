@@ -3,6 +3,8 @@ from eve import Eve
 from werkzeug.serving import run_simple as _run_simple
 
 from xepmts_server.admin import settings as settings
+from xepmts_server.utils import clean_dict
+
 settings_file = settings.__file__
 
 def make_app(settings=settings_file, auth=None, app=None,
@@ -39,6 +41,9 @@ def make_app(settings=settings_file, auth=None, app=None,
 
         }
 
+    @app.route(f'/{app.config["API_VERSION"]}/endpoints')
+    def endpoints():
+        return clean_dict(app.config['DOMAIN'])
 
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics

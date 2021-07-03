@@ -1,7 +1,7 @@
 import os
 
 from copy import deepcopy
-from xepmts_server.v1.secrets import MONGO_PASSWORD
+from xepmts_server.secrets import MONGO_PASSWORD
 from xepmts_server.v1.domain import get_domain
 
 DOMAIN = get_domain()

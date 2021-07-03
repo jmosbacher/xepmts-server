@@ -1,7 +1,7 @@
 
 from eve.auth import BasicAuth, TokenAuth
 from flask import current_app
-from xepmts_server.v1.secrets import ROOT_TOKEN, GLOBAL_READ_TOKEN
+from xepmts_server.secrets import ROOT_TOKEN, GLOBAL_READ_TOKEN
 import os
 from functools import lru_cache
 import requests

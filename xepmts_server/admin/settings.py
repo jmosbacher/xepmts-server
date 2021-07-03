@@ -1,6 +1,6 @@
 
 import os
-from xepmts_server.v2.secrets import MONGO_PASSWORD
+from xepmts_server.secrets import MONGO_PASSWORD
 
 VERSIONS = ['v1', 'v2', 'sc']
 
@@ -70,6 +70,7 @@ DOMAIN = {
     v: {
         'schema': RESOURCE_SCHEMA,
         'datasource': {'source': f'{v}_endpoints'},
+        'public_methods': ['GET'],
         'allowed_item_write_roles' : ['admin'],
         'allow_unknown': True,
         'additional_lookup': {

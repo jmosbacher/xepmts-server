@@ -147,7 +147,7 @@ def make_app(debug=False, overides={}):
         }
     swagger_config = {
         'app_name': "PMT Database API",
-        "urls": [{"name": f"Xenon PMT Database {v.capitalize()}", "url": f"/{v}/api-docs" } for v in list(static_apps)+list(app_configs)]
+        "urls": [{"name": f"Xenon PMT Database {v.capitalize()}", "url": f"/{v}/api-docs" } for v in list(app_configs)+list(static_apps)]
     }
     API_URL = '/v2/api-docs'
     SWAGGER_URL = ''
