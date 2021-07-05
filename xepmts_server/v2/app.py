@@ -41,7 +41,7 @@ def make_app(settings=SETTINGS_FILE, swagger=False, export_metrics=False, auth=N
 
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
-        PrometheusMetrics(app)
+        PrometheusMetrics(app, path=f'/{app.config["API_VERSION"]}/metrics')
         
     @app.route(f'/{app.config["API_VERSION"]}/endpoints')
     def endpoints():

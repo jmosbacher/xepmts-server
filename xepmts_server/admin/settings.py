@@ -4,6 +4,11 @@ from xepmts_server.secrets import MONGO_PASSWORD
 
 VERSIONS = ['v1', 'v2', 'sc']
 
+SERVER_SCHEMA = {
+    'name': { 'type': 'string', 'nullable': False, 'unique': True},
+    'url': { 'type': 'string', 'nullable': False, 'unique': True},
+
+}
 
 RESOURCE_SCHEMA = {
  'name': { 'type': 'string', 'nullable': False, 'unique': True},
@@ -23,7 +28,6 @@ RESOURCE_SCHEMA = {
  'resource_title': { 'type': 'string', 'required': True},
  'item_title': { 'type': 'string', 'required': True},
  'item_lookup': { 'type': 'boolean', 'default': True},
- 
  'allowed_item_roles': { 'type': 'list', 'schema': {'type': 'string'}},
  'allowed_item_read_roles': { 'type': 'list', 'schema': {'type': 'string'}},
  'allowed_item_write_roles': { 'type': 'list', 'schema': {'type': 'string'}},
@@ -38,7 +42,6 @@ RESOURCE_SCHEMA = {
  'bulk_enabled': { 'type': 'boolean', 'default': True},
  'internal_resource': { 'type': 'boolean', 'default': False},
  'etag_ignore_fields': { 'type': 'list', 'schema': {'type': 'string'}, 'nullable': True},
- 
  'auth_field': { 'type': 'string', 'nullable': True},
  'allow_unknown': { 'type': 'boolean', 'default': False},
  'extra_response_fields': { 'type': 'list', 'schema': {'type': 'string'}, 'default': []},
@@ -61,7 +64,7 @@ RESOURCE_SCHEMA = {
           'aggregation': {'type': 'dict', 'nullable': True},
      }
                },
-'additional_lookup': {'oneof':[{'type': 'string'}, {'type': 'dict'}], 'nullable': True},
+'additional_lookup': {'oneof': [{'type': 'string'}, {'type': 'dict'}], 'nullable': True},
 
 }
 
@@ -78,6 +81,16 @@ DOMAIN = {
             'field': 'name'
             }}
     for v in VERSIONS}
+
+DOMAIN['servers'] = {
+    'schema': SERVER_SCHEMA,
+    'allowed_item_write_roles' : ['admin'],
+    'allow_unknown': True,
+    'additional_lookup': {
+        'url': 'regex("[\w]+")',
+        'field': 'name'
+            },
+}    
 
 URL_PREFIX = os.getenv("XEPMTS_URL_PREFIX", "")
 API_VERSION = "admin"

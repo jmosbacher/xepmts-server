@@ -47,7 +47,7 @@ def make_app(settings=settings_file, auth=None, app=None,
 
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
-        PrometheusMetrics(app)
+        PrometheusMetrics(app, path=f'/{app.config["API_VERSION"]}/metrics')
 
     return app
 

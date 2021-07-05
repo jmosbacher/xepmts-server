@@ -12,7 +12,7 @@ from .v1.auth import XenonTokenAuth
 from .v2.app import make_app as make_v2_app
 from .admin.app import make_app as make_admin_app
 
-from .utils import PathDispatcher, PathMakerDispatcher
+from .utils import PathDispatcher, PathMakerDispatcher, add_server_spec_endpoint
 import xepmts_server
 from eve_jwt import JWTAuth
 
@@ -91,7 +91,7 @@ def create_app():
 def settings_dict(module):
     return {k: getattr(module, k) for k in dir(module) if k.isupper()}
 
-def make_app(debug=False, overides={}):
+def make_app(debug=False, overides={}, export_metrics=True):
     from eve_jwt import JWTAuth
     from flask_swagger_ui import get_swaggerui_blueprint
     from prometheus_flask_exporter import PrometheusMetrics
@@ -157,7 +157,8 @@ def make_app(debug=False, overides={}):
         config=swagger_config,
     )
     app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
-    # PrometheusMetrics(app)
+    if export_metrics:
+        PrometheusMetrics(app)
 
     application = PathMakerDispatcher(app,
                           static_apps=static_apps,

@@ -1,10 +1,26 @@
 import xepmts_server
 from werkzeug.wsgi import pop_path_info, peek_path_info
+from flask import request
+
 import json
 import time
 
 REFRESH_PERIOD = 3600
 
+
+def clean_dict(d):
+    return {k1: {k2:v2 for k2,v2 in v1.items() if is_jsonable(v2)} for k1,v1 in d.items()}
+
+def add_server_spec_endpoint(app):
+    @app.route(f'/{app.config["API_VERSION"]}/server-spec')
+    def server_spec():
+        spec = {
+            'base_url': f'{request.base_url}/{app.config["API_VERSION"]}/', 
+            'endpoints': clean_dict(app.config['DOMAIN'])
+        }
+        return spec
+    return app
+    
 class PathMakerDispatcher:
     def __init__(self, base_app, static_apps, app_configs):
         self.base_app = base_app
@@ -24,7 +40,6 @@ class PathMakerDispatcher:
             if REFRESH_PERIOD<(time.time()-t):
                 self.dynamic_apps[v] = t,app = time.time(), self.make_app(v)
             return app
-            
         return self.base_app
 
     def __call__(self, environ, start_response):
@@ -48,6 +63,3 @@ def is_jsonable(x):
         return True
     except (TypeError, OverflowError):
         return False
-
-def clean_dict(d):
-    return {k1: {k2:v2 for k2,v2 in v1.items() if is_jsonable(v2)} for k1,v1 in d.items()}
