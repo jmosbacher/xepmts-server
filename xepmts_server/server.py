@@ -150,7 +150,7 @@ def make_app(debug=False, overides={}, export_metrics=True, healthcheck=True):
         "urls": [{"name": f"Xenon PMT Database {v.capitalize()}", "url": f"/{v}/api-docs" } for v in list(app_configs)+list(static_apps)]
     }
     API_URL = '/v2/api-docs'
-    SWAGGER_URL = ''
+    SWAGGER_URL = os.getenv('SWAGGER_URL_PREFIX', '')
     SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
         SWAGGER_URL,
         API_URL,
@@ -160,7 +160,7 @@ def make_app(debug=False, overides={}, export_metrics=True, healthcheck=True):
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app)
-    
+
     application = PathMakerDispatcher(app,
                           static_apps=static_apps,
                           app_configs=app_configs)
