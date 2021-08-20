@@ -10,7 +10,7 @@ from xepmts_server.utils import clean_dict
 
 def make_app(settings=SETTINGS_FILE, auth=None, app=None,
              swagger=False, fs_store=False,
-             export_metrics=True):
+             export_metrics=True, healthcheck=True):
 
     kwargs = {}
     # if fs_store:
@@ -50,6 +50,10 @@ def make_app(settings=SETTINGS_FILE, auth=None, app=None,
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app, path=f'/{app.config["API_VERSION"]}/metrics')
+
+    if healthcheck:
+        from eve_healthcheck import EveHealthCheck
+        hc = EveHealthCheck(app, f'/healthcheck')
 
     @app.route(f'/{app.config["API_VERSION"]}/endpoints')
     def endpoints():

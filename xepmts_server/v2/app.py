@@ -8,10 +8,9 @@ from xepmts_server.utils import clean_dict
 # from eve_jwt import JWTAuth
 SETTINGS_FILE = settings.__file__
 
-def make_app(settings=SETTINGS_FILE, swagger=False, export_metrics=False, auth=None, **kwargs):
+def make_app(settings=SETTINGS_FILE, swagger=False, 
+            export_metrics=False, healthcheck=True, auth=None, **kwargs):
     from eve import Eve
-    
-
     app = Eve(settings=settings, auth=auth, **kwargs)
     if swagger:
         # from eve_swagger import swagger as swagger_blueprint
@@ -42,7 +41,11 @@ def make_app(settings=SETTINGS_FILE, swagger=False, export_metrics=False, auth=N
     if export_metrics:
         from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app, path=f'/{app.config["API_VERSION"]}/metrics')
-        
+    
+    if healthcheck:
+        from eve_healthcheck import EveHealthCheck
+        hc = EveHealthCheck(app, '/healthcheck')
+
     @app.route(f'/{app.config["API_VERSION"]}/endpoints')
     def endpoints():
         return clean_dict(app.config['DOMAIN'])
