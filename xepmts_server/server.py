@@ -34,7 +34,7 @@ DEBUG_CONFIGS = {
 def create_app():
     from eve_jwt import JWTAuth
     from flask_swagger_ui import get_swaggerui_blueprint
-    from prometheus_flask_exporter import PrometheusMetrics
+    
     
     v1 = make_v1_app(auth=XenonTokenAuth, swagger=True)
     v2 = make_v2_app(auth=JWTAuth, swagger=True)
@@ -81,8 +81,6 @@ def create_app():
         config=config,
     )
     app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
-    # PrometheusMetrics(app)
-
     application = PathDispatcher(app,
                          app_versions)
 
@@ -91,10 +89,10 @@ def create_app():
 def settings_dict(module):
     return {k: getattr(module, k) for k in dir(module) if k.isupper()}
 
-def make_app(debug=False, overides={}, export_metrics=True):
+def make_app(debug=False, overides={}, export_metrics=True, healthcheck=True):
     from eve_jwt import JWTAuth
     from flask_swagger_ui import get_swaggerui_blueprint
-    from prometheus_flask_exporter import PrometheusMetrics
+    
     # if versions is None:
     #     versions = xepmts_server.VERSIONS
     admin_auth = JWTAuth
@@ -121,6 +119,8 @@ def make_app(debug=False, overides={}, export_metrics=True):
                 print(f'endpoints for version {version} taken from database.')
                 settings['DOMAIN'] = endpoints
             kwargs['settings'] = settings
+            kwargs['healthcheck'] = healthcheck
+            kwargs['export_metrics'] = export_metrics
             app_configs[version] = kwargs
  
 
@@ -158,8 +158,9 @@ def make_app(debug=False, overides={}, export_metrics=True):
     )
     app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
     if export_metrics:
+        from prometheus_flask_exporter import PrometheusMetrics
         PrometheusMetrics(app)
-
+    
     application = PathMakerDispatcher(app,
                           static_apps=static_apps,
                           app_configs=app_configs)
