@@ -74,7 +74,7 @@ def create_app():
         "urls": [{"name": f"Xenon PMT Database {v.capitalize()}", "url": f"/{v}/api-docs" } for v in app_versions]
     }
     API_URL = '/v2/api-docs'
-    SWAGGER_URL = ''
+    SWAGGER_URL = os.getenv('SWAGGER_URL_PREFIX', '')
     SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
         SWAGGER_URL,
         API_URL,
