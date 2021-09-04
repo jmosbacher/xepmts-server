@@ -5,7 +5,7 @@ from .utils import add_server_spec_endpoint
 
 __author__ = """Yossi Mosbacher"""
 __email__ = 'joe.mosbacher@gmail.com'
-__version__ = '0.1.11'
+__version__ = '0.1.12'
 
 VERSIONS = {
     "v1": v1,
