@@ -28,7 +28,7 @@ class PathMakerDispatcher:
         self.app_configs = app_configs
         self.dynamic_apps = {v: (time.time(), self.make_app(v)) for v in app_configs}
     
-    def make_app(self, v):
+    def make_app(self, v): 
         return xepmts_server.get_server(v, **self.app_configs[v])
 
     def get_app(self, v):
@@ -38,6 +38,7 @@ class PathMakerDispatcher:
         if v in self.dynamic_apps:
             t,app = self.dynamic_apps[v]
             if REFRESH_PERIOD<(time.time()-t):
+                del app
                 self.dynamic_apps[v] = t,app = time.time(), self.make_app(v)
             return app
         return self.base_app

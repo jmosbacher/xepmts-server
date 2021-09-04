@@ -35,7 +35,6 @@ def create_app():
     from eve_jwt import JWTAuth
     from flask_swagger_ui import get_swaggerui_blueprint
     
-    
     v1 = make_v1_app(auth=XenonTokenAuth, swagger=True)
     v2 = make_v2_app(auth=JWTAuth, swagger=True)
     
